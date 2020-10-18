@@ -1,5 +1,7 @@
 package bsu.rfe.java.group7.lab2.Churilo.varC3;
 
+import jdk.jfr.events.ThrowablesEvent;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -105,12 +107,65 @@ public class MainFrame extends JFrame {
         hboxResult.add(textFieldResult);
         hboxResult.add(Box.createHorizontalGlue());
 
+        //Кнопки "Вычислить" и "Очистить"
+        JButton buttonCalc = new JButton("Вычислить");
+        buttonCalc.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    Double x = Double.parseDouble(textFieldX.getText());
+                    Double y = Double.parseDouble(textFieldY.getText());
+                    Double z = Double.parseDouble(textFieldZ.getText());
+                    Double result;
+                    if (formulaId == 1) {
+                        if (y == 0)
+                            throw new ArithmeticException("Y не должен быть равен 0");
+                        if (z == 0)
+                            throw new ArithmeticException("Z не должен быть равен 0");
+                        result = calculate1(x, y, z);
+                    }
+                    else {
+                        if (x <= 0)
+                            throw new ArithmeticException("X должен быть больше 0");
+                        if (z == -1)
+                            throw new ArithmeticException("Z не должен быть равен -1");
+                        result = calculate2(x, y, z);
+                    }
+                    textFieldResult.setText(result.toString());
+                }
+                catch (NumberFormatException ex){
+                    JOptionPane.showMessageDialog(MainFrame.this,"Ошибка в формате записи числа с плавающей точкой", "Ошибочный формат числа", JOptionPane.WARNING_MESSAGE);
+                }
+                catch (ArithmeticException ex){
+                    JOptionPane.showMessageDialog(MainFrame.this, ex.toString(), "Выход из ОДЗ", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+
+
+        });
+        JButton buttonReset = new JButton("Очистить");
+        buttonReset.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                textFieldX.setText("0");
+                textFieldY.setText("0");
+                textFieldZ.setText("0");
+                textFieldResult.setText("0");
+            }
+        });
+
+        Box hboxButtons1 = Box.createHorizontalBox();
+        hboxButtons1.add(Box.createHorizontalGlue());
+        hboxButtons1.add(buttonCalc);
+        hboxButtons1.add(Box.createHorizontalStrut(100));
+        hboxButtons1.add(buttonReset);
+        hboxButtons1.add(Box.createHorizontalGlue());
+
         //Совмещение
         Box contentBox = Box.createVerticalBox();
         contentBox.add(Box.createVerticalGlue());
         contentBox.add(hboxFormulaType);
         contentBox.add(hboxVariables);
         contentBox.add(hboxResult);
+        contentBox.add(hboxButtons1);
         contentBox.add(Box.createVerticalGlue());
         getContentPane().add(contentBox, BorderLayout.CENTER);
     }
