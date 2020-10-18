@@ -1,19 +1,25 @@
 package bsu.rfe.java.group7.lab2.Churilo.varC3;
 
-import jdk.jfr.events.ThrowablesEvent;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MainFrame extends JFrame {
-    private static final int WIDTH = 500;
+    private static final int WIDTH = 1000;
     private static final int HEIGHT = 500;
+
+    private double mem1;
+    private double mem2;
+    private double mem3;
 
     private JTextField textFieldX;
     private JTextField textFieldY;
     private JTextField textFieldZ;
+
+    private JLabel labelForMem1;
+    private JLabel labelForMem2;
+    private JLabel labelForMem3;
 
     private JTextField textFieldResult;
 
@@ -52,8 +58,14 @@ public class MainFrame extends JFrame {
                 MainFrame.this.variableId = variableId;
             }
         });
-        radioButtonsFormulas.add(button);
-        hboxFormulaType.add(button);
+        radioButtonsVariable.add(button);
+        hboxVariableType.add(button);
+    }
+
+    private void reloadMemoryPanel(){
+        labelForMem1.setText("" + mem1);
+        labelForMem2.setText("" + mem2);
+        labelForMem3.setText("" + mem3);
     }
 
     public MainFrame() {
@@ -80,20 +92,20 @@ public class MainFrame extends JFrame {
         textFieldZ = new JTextField("0", 10);
         textFieldZ.setMaximumSize(textFieldZ.getPreferredSize());
 
-        Box hboxVariables = Box.createHorizontalBox();
-        hboxVariables.add(Box.createHorizontalGlue());
-        hboxVariables.add(labelForX);
-        hboxVariables.add(Box.createHorizontalStrut(10));
-        hboxVariables.add(textFieldX);
-        hboxVariables.add(Box.createHorizontalStrut(30));
-        hboxVariables.add(labelForY);
-        hboxVariables.add(Box.createHorizontalStrut(10));
-        hboxVariables.add(textFieldY);
-        hboxVariables.add(Box.createHorizontalStrut(30));
-        hboxVariables.add(labelForZ);
-        hboxVariables.add(Box.createHorizontalStrut(10));
-        hboxVariables.add(textFieldZ);
-        hboxVariables.add(Box.createHorizontalGlue());
+        Box hboxArgumets = Box.createHorizontalBox();
+        hboxArgumets.add(Box.createHorizontalGlue());
+        hboxArgumets.add(labelForX);
+        hboxArgumets.add(Box.createHorizontalStrut(10));
+        hboxArgumets.add(textFieldX);
+        hboxArgumets.add(Box.createHorizontalStrut(30));
+        hboxArgumets.add(labelForY);
+        hboxArgumets.add(Box.createHorizontalStrut(10));
+        hboxArgumets.add(textFieldY);
+        hboxArgumets.add(Box.createHorizontalStrut(30));
+        hboxArgumets.add(labelForZ);
+        hboxArgumets.add(Box.createHorizontalStrut(10));
+        hboxArgumets.add(textFieldZ);
+        hboxArgumets.add(Box.createHorizontalGlue());
 
         //Вывод результата
         JLabel labelForResult = new JLabel("Результат: ");
@@ -159,13 +171,64 @@ public class MainFrame extends JFrame {
         hboxButtons1.add(buttonReset);
         hboxButtons1.add(Box.createHorizontalGlue());
 
+        //Панель переменных
+        labelForMem1 = new JLabel("" + mem1);
+        labelForMem2 = new JLabel("" + mem2);
+        labelForMem3 = new JLabel("" + mem3);
+        hboxVariableType.add(Box.createHorizontalGlue());
+        addVariableRadioButton("Переменная 1: ", 1);
+        hboxVariableType.add(labelForMem1);
+        hboxVariableType.add(Box.createHorizontalStrut(10));
+        addVariableRadioButton("Переменная 2: ", 2);
+        hboxVariableType.add(labelForMem2);
+        hboxVariableType.add(Box.createHorizontalStrut(10));
+        addVariableRadioButton("Переменная 3: ", 3);
+        hboxVariableType.add(labelForMem3);
+        radioButtonsVariable.setSelected(radioButtonsVariable.getElements().nextElement().getModel(), true);
+        hboxVariableType.add(Box.createHorizontalGlue());
+        hboxVariableType.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+
+        //Кнопки МС и М+
+        JButton buttonMC = new JButton("MC");
+        buttonMC.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (variableId == 1)
+                    mem1 = 0;
+                else if (variableId == 2)
+                    mem2 = 0;
+                else
+                    mem3 = 0;
+                reloadMemoryPanel();
+            }
+        });
+        JButton buttonMP = new JButton("M+");
+        buttonMP.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (variableId == 1)
+                    mem1 += Double.parseDouble(textFieldResult.getText());
+                else if (variableId == 2)
+                    mem2 += Double.parseDouble(textFieldResult.getText());
+                else
+                    mem3 += Double.parseDouble(textFieldResult.getText());
+                reloadMemoryPanel();
+            }
+        });
+        Box hboxVariablesButtons = Box.createHorizontalBox();
+        hboxVariablesButtons.add(Box.createHorizontalGlue());
+        hboxVariablesButtons.add(buttonMC);
+        hboxVariablesButtons.add(Box.createHorizontalStrut(100));
+        hboxVariablesButtons.add(buttonMP);
+        hboxVariablesButtons.add(Box.createHorizontalGlue());
+
         //Совмещение
         Box contentBox = Box.createVerticalBox();
         contentBox.add(Box.createVerticalGlue());
         contentBox.add(hboxFormulaType);
-        contentBox.add(hboxVariables);
+        contentBox.add(hboxArgumets);
         contentBox.add(hboxResult);
         contentBox.add(hboxButtons1);
+        contentBox.add(hboxVariableType);
+        contentBox.add(hboxVariablesButtons);
         contentBox.add(Box.createVerticalGlue());
         getContentPane().add(contentBox, BorderLayout.CENTER);
     }
