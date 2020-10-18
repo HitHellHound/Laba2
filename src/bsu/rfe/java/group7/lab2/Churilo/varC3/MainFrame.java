@@ -80,20 +80,37 @@ public class MainFrame extends JFrame {
 
         Box hboxVariables = Box.createHorizontalBox();
         hboxVariables.add(Box.createHorizontalGlue());
+        hboxVariables.add(labelForX);
+        hboxVariables.add(Box.createHorizontalStrut(10));
         hboxVariables.add(textFieldX);
+        hboxVariables.add(Box.createHorizontalStrut(30));
+        hboxVariables.add(labelForY);
         hboxVariables.add(Box.createHorizontalStrut(10));
         hboxVariables.add(textFieldY);
+        hboxVariables.add(Box.createHorizontalStrut(30));
+        hboxVariables.add(labelForZ);
         hboxVariables.add(Box.createHorizontalStrut(10));
         hboxVariables.add(textFieldZ);
         hboxVariables.add(Box.createHorizontalGlue());
 
-        //
+        //Вывод результата
+        JLabel labelForResult = new JLabel("Результат: ");
+        textFieldResult = new JTextField("0", 10);
+        textFieldResult.setMaximumSize(textFieldResult.getPreferredSize());
+
+        Box hboxResult = Box.createHorizontalBox();
+        hboxResult.add(Box.createHorizontalGlue());
+        hboxResult.add(labelForResult);
+        hboxResult.add(Box.createHorizontalStrut(10));
+        hboxResult.add(textFieldResult);
+        hboxResult.add(Box.createHorizontalGlue());
 
         //Совмещение
         Box contentBox = Box.createVerticalBox();
         contentBox.add(Box.createVerticalGlue());
         contentBox.add(hboxFormulaType);
         contentBox.add(hboxVariables);
+        contentBox.add(hboxResult);
         contentBox.add(Box.createVerticalGlue());
         getContentPane().add(contentBox, BorderLayout.CENTER);
     }
