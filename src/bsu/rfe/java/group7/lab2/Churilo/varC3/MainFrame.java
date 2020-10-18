@@ -1,13 +1,17 @@
 package bsu.rfe.java.group7.lab2.Churilo.varC3;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class MainFrame extends JFrame {
     private static final int WIDTH = 1000;
-    private static final int HEIGHT = 500;
+    private static final int HEIGHT = 700;
 
     private double mem1;
     private double mem2;
@@ -22,6 +26,36 @@ public class MainFrame extends JFrame {
     private JLabel labelForMem3;
 
     private JTextField textFieldResult;
+
+    class ImgPanel extends JPanel{
+        private Image image;
+        public ImgPanel(){
+            try {
+                image = ImageIO.read(new File("Formula1.bmp"));
+            }
+            catch (IOException ex){
+                System.out.println("ImageError");
+            }
+        }
+
+        public void reloadFormulaImage(){
+            try {
+                image = ImageIO.read(new File("Formula" + formulaId + ".bmp"));
+            }
+            catch (IOException ex){
+                System.out.println("ReloadImageError");
+            }
+            paintComponent(image.getGraphics());
+        }
+
+        public void paintComponent(Graphics g){
+            System.out.println(formulaId);
+            super.paintComponent(g);
+            g.drawImage(image, 0, 0, null);
+        }
+    }
+
+    private ImgPanel panelFormula;;
 
     private ButtonGroup radioButtonsFormulas = new ButtonGroup();
     private ButtonGroup radioButtonsVariable = new ButtonGroup();
@@ -45,6 +79,7 @@ public class MainFrame extends JFrame {
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 MainFrame.this.formulaId = formulaId;
+                panelFormula.reloadFormulaImage();
             }
         });
         radioButtonsFormulas.add(button);
@@ -73,6 +108,8 @@ public class MainFrame extends JFrame {
         setSize(WIDTH, HEIGHT);
         Toolkit kit = Toolkit.getDefaultToolkit();
         setLocation((kit.getScreenSize().width - WIDTH) / 2, (kit.getScreenSize().height - HEIGHT) / 2);
+        Image img = kit.getImage("icon.png");
+        setIconImage(img);
 
         //Тип формулы
         hboxFormulaType.add(Box.createHorizontalGlue());
@@ -80,6 +117,14 @@ public class MainFrame extends JFrame {
         addFormulaRadioButton("Формула 2", 2);
         radioButtonsFormulas.setSelected(radioButtonsFormulas.getElements().nextElement().getModel(), true);
         hboxFormulaType.add(Box.createHorizontalGlue());
+
+        //Картинка формулы
+        panelFormula = new ImgPanel();
+        panelFormula.setMinimumSize(new Dimension(900, 100));
+        Box hboxFormulaImg = Box.createHorizontalBox();
+        hboxFormulaImg.add(Box.createHorizontalGlue());
+        hboxFormulaImg.add(panelFormula);
+        hboxFormulaImg.add(Box.createHorizontalGlue());
 
         //Поля аргументов
         JLabel labelForX = new JLabel("X:");
@@ -224,6 +269,7 @@ public class MainFrame extends JFrame {
         Box contentBox = Box.createVerticalBox();
         contentBox.add(Box.createVerticalGlue());
         contentBox.add(hboxFormulaType);
+        contentBox.add(hboxFormulaImg);
         contentBox.add(hboxArgumets);
         contentBox.add(hboxResult);
         contentBox.add(hboxButtons1);
