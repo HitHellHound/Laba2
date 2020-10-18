@@ -1,6 +1,8 @@
 package bsu.rfe.java.group7.lab2.Churilo.varC3;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class MainFrame extends JFrame {
     private static final int WIDTH = 500;
@@ -27,6 +29,28 @@ public class MainFrame extends JFrame {
 
     public Double calculate2 (Double x, Double y, Double z){
         return Math.sqrt(Math.sqrt(Math.cos(Math.exp(y)) + Math.exp(y * y) + Math.sqrt(1 / x))) / Math.pow(Math.cos(Math.PI * z * z * z) + Math.log(Math.pow(1 + z, 2)), Math.sin(y));
+    }
+
+    private void addFormulaRadioButton(String buttonName, final int formulaId) {
+        JRadioButton button = new JRadioButton(buttonName);
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                MainFrame.this.formulaId = formulaId;
+            }
+        });
+        radioButtonsFormulas.add(button);
+        hboxFormulaType.add(button);
+    }
+
+    private void addVariableRadioButton(String buttonName, final int variableId) {
+        JRadioButton button = new JRadioButton(buttonName);
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                MainFrame.this.variableId = variableId;
+            }
+        });
+        radioButtonsFormulas.add(button);
+        hboxFormulaType.add(button);
     }
 
     public static void main(String[] args){
