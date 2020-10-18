@@ -1,6 +1,7 @@
 package bsu.rfe.java.group7.lab2.Churilo.varC3;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -51,6 +52,28 @@ public class MainFrame extends JFrame {
         });
         radioButtonsFormulas.add(button);
         hboxFormulaType.add(button);
+    }
+
+    public MainFrame() {
+        super("Вычисление формулы");
+        setSize(WIDTH, HEIGHT);
+        Toolkit kit = Toolkit.getDefaultToolkit();
+        setLocation((kit.getScreenSize().width - WIDTH) / 2, (kit.getScreenSize().height - HEIGHT) / 2);
+
+        //Тип формулы
+        hboxFormulaType.add(Box.createHorizontalGlue());
+        addFormulaRadioButton("Формула 1", 1);
+        addFormulaRadioButton("Формула 2", 2);
+        radioButtonsFormulas.setSelected(radioButtonsFormulas.getElements().nextElement().getModel(), true);
+        hboxFormulaType.add(Box.createHorizontalGlue());
+
+
+        //Совмещение
+        Box contentBox = Box.createVerticalBox();
+        contentBox.add(Box.createVerticalGlue());
+        contentBox.add(hboxFormulaType);
+        contentBox.add(Box.createVerticalGlue());
+        getContentPane().add(contentBox, BorderLayout.CENTER);
     }
 
     public static void main(String[] args){
