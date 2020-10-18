@@ -67,11 +67,33 @@ public class MainFrame extends JFrame {
         radioButtonsFormulas.setSelected(radioButtonsFormulas.getElements().nextElement().getModel(), true);
         hboxFormulaType.add(Box.createHorizontalGlue());
 
+        //Поля аргументов
+        JLabel labelForX = new JLabel("X:");
+        textFieldX = new JTextField("0", 10);
+        textFieldX.setMaximumSize(textFieldX.getPreferredSize());
+        JLabel labelForY = new JLabel("Y:");
+        textFieldY = new JTextField("0", 10);
+        textFieldY.setMaximumSize(textFieldY.getPreferredSize());
+        JLabel labelForZ = new JLabel("Z: ");
+        textFieldZ = new JTextField("0", 10);
+        textFieldZ.setMaximumSize(textFieldZ.getPreferredSize());
+
+        Box hboxVariables = Box.createHorizontalBox();
+        hboxVariables.add(Box.createHorizontalGlue());
+        hboxVariables.add(textFieldX);
+        hboxVariables.add(Box.createHorizontalStrut(10));
+        hboxVariables.add(textFieldY);
+        hboxVariables.add(Box.createHorizontalStrut(10));
+        hboxVariables.add(textFieldZ);
+        hboxVariables.add(Box.createHorizontalGlue());
+
+        //
 
         //Совмещение
         Box contentBox = Box.createVerticalBox();
         contentBox.add(Box.createVerticalGlue());
         contentBox.add(hboxFormulaType);
+        contentBox.add(hboxVariables);
         contentBox.add(Box.createVerticalGlue());
         getContentPane().add(contentBox, BorderLayout.CENTER);
     }
