@@ -15,9 +15,9 @@ public class MainFrame extends JFrame {
     private static final int WIDTH = 1000;
     private static final int HEIGHT = 700;
 
-    private double mem1;
-    private double mem2;
-    private double mem3;
+    private Double mem1 = 0.0;
+    private Double mem2 = 0.0;
+    private Double mem3 = 0.0;
 
     private JTextField textFieldX;
     private JTextField textFieldY;
@@ -73,9 +73,9 @@ public class MainFrame extends JFrame {
     }
 
     private void reloadMemoryPanel(){
-        labelForMem1.setText("" + mem1);
-        labelForMem2.setText("" + mem2);
-        labelForMem3.setText("" + mem3);
+        labelForMem1.setText(mem1.toString());
+        labelForMem2.setText(mem2.toString());
+        labelForMem3.setText(mem3.toString());
     }
 
     private void reloadFormulaImage(){
@@ -135,7 +135,7 @@ public class MainFrame extends JFrame {
 
         //Вывод результата
         JLabel labelForResult = new JLabel("Результат: ");
-        textFieldResult = new JTextField("0", 10);
+        textFieldResult = new JTextField("0", 20);
         textFieldResult.setMaximumSize(textFieldResult.getPreferredSize());
 
         Box hboxResult = Box.createHorizontalBox();
@@ -160,10 +160,6 @@ public class MainFrame extends JFrame {
                         if (z == 0)
                             throw new ArithmeticException("Z не должен быть равен 0");
                         result = calculate1(x, y, z);
-                        mem1 = x;
-                        mem2 = y;
-                        mem3 = z;
-                        reloadMemoryPanel();
                     }
                     else {
                         if (x <= 0)
@@ -171,10 +167,6 @@ public class MainFrame extends JFrame {
                         if (z == -1)
                             throw new ArithmeticException("Z не должен быть равен -1");
                         result = calculate2(x, y, z);
-                        mem1 = x;
-                        mem2 = y;
-                        mem3 = z;
-                        reloadMemoryPanel();
                     }
                     textFieldResult.setText(result.toString());
                 }
@@ -205,32 +197,33 @@ public class MainFrame extends JFrame {
         hboxButtons1.add(buttonReset);
         hboxButtons1.add(Box.createHorizontalGlue());
 
-        //Выбор переменной
+        //Панель переменных
+        labelForMem1 = new JLabel(mem1.toString());
+        labelForMem2 = new JLabel(mem2.toString());
+        labelForMem3 = new JLabel(mem3.toString());
         hboxVariableType.add(Box.createHorizontalGlue());
-        addVariableRadioButton("Переменная 1", 1);
+        addVariableRadioButton("Переменная 1: ", 1);
+        hboxVariableType.add(labelForMem1);
         hboxVariableType.add(Box.createHorizontalStrut(10));
-        addVariableRadioButton("Переменная 2", 2);
+        addVariableRadioButton("Переменная 2: ", 2);
+        hboxVariableType.add(labelForMem2);
         hboxVariableType.add(Box.createHorizontalStrut(10));
-        addVariableRadioButton("Переменная 3", 3);
+        addVariableRadioButton("Переменная 3: ", 3);
+        hboxVariableType.add(labelForMem3);
         radioButtonsVariable.setSelected(radioButtonsVariable.getElements().nextElement().getModel(), true);
         hboxVariableType.add(Box.createHorizontalGlue());
+        hboxVariableType.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
         //Кнопки МС и М+
         JButton buttonMC = new JButton("MC");
         buttonMC.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (variableId == 1) {
-                    mem1 = 0;
-                    textFieldX.setText("0");
-                }
-                else if (variableId == 2) {
-                    mem2 = 0;
-                    textFieldY.setText("0");
-                }
-                else {
-                    mem3 = 0;
-                    textFieldZ.setText("0");
-                }
+                if (variableId == 1)
+                    mem1 = 0.0;
+                else if (variableId == 2)
+                    mem2 = 0.0;
+                else
+                    mem3 = 0.0;
                 reloadMemoryPanel();
             }
         });
@@ -238,39 +231,21 @@ public class MainFrame extends JFrame {
         buttonMP.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (variableId == 1)
-                    textFieldResult.setText("" + (Double.parseDouble(textFieldResult.getText()) + mem1));
+                    mem1 += Double.parseDouble(textFieldResult.getText());
                 else if (variableId == 2)
-                    textFieldResult.setText("" + (Double.parseDouble(textFieldResult.getText()) + mem2));
+                    mem2 += Double.parseDouble(textFieldResult.getText());
                 else
-                    textFieldResult.setText("" + (Double.parseDouble(textFieldResult.getText()) + mem3));
+                    mem3 += Double.parseDouble(textFieldResult.getText());
+                reloadMemoryPanel();
             }
         });
+
         Box hboxVariablesButtons = Box.createHorizontalBox();
         hboxVariablesButtons.add(Box.createHorizontalGlue());
         hboxVariablesButtons.add(buttonMC);
         hboxVariablesButtons.add(Box.createHorizontalStrut(100));
         hboxVariablesButtons.add(buttonMP);
         hboxVariablesButtons.add(Box.createHorizontalGlue());
-
-        //Панел памяти
-        Box hboxMemory = Box.createHorizontalBox();
-        labelForMem1 = new JLabel("" + mem1);
-        labelForMem2 = new JLabel("" + mem2);
-        labelForMem3 = new JLabel("" + mem3);
-        hboxMemory.add(Box.createHorizontalGlue());
-        hboxMemory.add(new JLabel("Память 1:"));
-        hboxMemory.add(Box.createHorizontalStrut(10));
-        hboxMemory.add(labelForMem1);
-        hboxMemory.add(Box.createHorizontalStrut(30));
-        hboxMemory.add(new JLabel("Память 2:"));
-        hboxMemory.add(Box.createHorizontalStrut(10));
-        hboxMemory.add(labelForMem2);
-        hboxMemory.add(Box.createHorizontalStrut(30));
-        hboxMemory.add(new JLabel("Память 3:"));
-        hboxMemory.add(Box.createHorizontalStrut(10));
-        hboxMemory.add(labelForMem3);
-        hboxMemory.add(Box.createHorizontalGlue());
-        hboxMemory.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
 
         //Совмещение
         Box contentBox = Box.createVerticalBox();
@@ -282,7 +257,6 @@ public class MainFrame extends JFrame {
         contentBox.add(hboxButtons1);
         contentBox.add(hboxVariableType);
         contentBox.add(hboxVariablesButtons);
-        contentBox.add(hboxMemory);
         contentBox.add(Box.createVerticalGlue());
         getContentPane().add(contentBox, BorderLayout.CENTER);
     }
